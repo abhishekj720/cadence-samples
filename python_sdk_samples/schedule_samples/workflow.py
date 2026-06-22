@@ -2,7 +2,7 @@ import asyncio
 from datetime import timedelta
 
 from cadence import Registry, workflow
-from cadence.workflow import ActivityOptions, execute_activity
+from cadence.workflow import execute_activity
 
 SCHEDULE_ID = "my-cadence-schedule"
 BUFFER_SCHEDULE_ID = "my-buffer-schedule"
@@ -31,10 +31,9 @@ class SlowScheduleSampleWorkflow:
     @workflow.run
     async def run(self) -> str:
         await execute_activity(
-            slow_sleep_activity,
-            options=ActivityOptions(
-                schedule_to_close_timeout=timedelta(minutes=5),
-                start_to_close_timeout=timedelta(minutes=5),
-            ),
+            "slow_sleep_activity",
+            str,
+            schedule_to_close_timeout=timedelta(minutes=5),
+            start_to_close_timeout=timedelta(minutes=5),
         )
         return "slow-ok"
